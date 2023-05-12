@@ -1,94 +1,66 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client"
+
+import Image from 'next/image';
+import styles from './../styles/page.module.css';
+import { useState, useEffect } from 'react';
+import axios from "axios";
 
 export default function Home() {
+
+  const [advice, setAdvice] = useState([]);
+
+  useEffect(() => {
+    axios.get("https://api.adviceslip.com/advice")
+    .then (res => {
+      const data = res.data.slip
+      
+      setAdvice(data);
+    })
+    .catch (err => {
+      console.log(err)
+    })
+  }, []);
+
+const handleClick = () => {
+  axios.get("https://api.adviceslip.com/advice")
+    .then (res => {
+      const data = res.data.slip
+      
+      setAdvice(data);
+    })
+    .catch (err => {
+      console.log(err)
+    })
+}
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
+      
+      <div className={styles.card}>
+        <p>ADVICE #{advice.id}</p>
+        <h2>
+          "{advice.advice}"
+        </h2>
         <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+          src="./assets/images/pattern-divider-desktop.svg"
+          width={400}
+          height={10}
+          className={styles.divider_desktop}
+          alt="divider image"
+        >
+          
+        </Image>
+       <br/>
+       <button className={styles.icon_dice} onClick={handleClick}>
+        <Image
+          src="./assets/images/icon-dice.svg"
+          width={20}
+          height={20}
+          className={styles.icon_img}
+          alt="icon-dice"
+          
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        </button>
       </div>
     </main>
   )
